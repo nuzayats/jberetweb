@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm" version="2.1">
+
+    <named-query name="countJobExecution">
+        <query><![CDATA[
+            SELECT COUNT(e) FROM JobExecution e
+        ]]></query>
+    </named-query>
+</entity-mappings>
