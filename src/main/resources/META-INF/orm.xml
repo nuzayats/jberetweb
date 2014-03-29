@@ -6,4 +6,5 @@
             SELECT COUNT(e) FROM JobExecution e
         ]]></query>
     </named-query>
+
 </entity-mappings>

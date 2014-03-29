@@ -4,46 +4,62 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css"
           href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/redmond/jquery-ui.css"/>
+    <link rel="stylesheet" href="css/datatables.css"/>
+    <link rel="stylesheet" href="css/basic.css"/>
     <script type="text/javascript" charset="utf8"
             src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" charset="utf8"
             src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#example').dataTable({
-                "bFilter": false,
-                "sPaginationType": "full_numbers",
-                "aaSorting": [
-                    [ 0, "desc" ]
-                ],
-                "aoColumns": [
-                    { "bSortable": true },
-                    { "bSortable": false },
-                    { "bSortable": false },
-                    { "bSortable": false },
-                    { "bSortable": false }
-                ],
-                "bProcessing": true,
-                "bServerSide": true,
-                "sAjaxSource": "webapi/JobExecutionReportService"
-            });
-        });
-    </script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.22/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.layout-latest.js"></script>
+    <script type="text/javascript" src="js/custom/main.js"></script>
+    <script type="text/javascript" src="js/custom/datatables.js"></script>
     <title>JobExecutions</title>
 </head>
 <body>
-<table id="example">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>jobName</th>
-        <th>startTime</th>
-        <th>endTime</th>
-        <th>batchStatus</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div class="outer-center">
+    <table id="example">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>jobName</th>
+            <th>startTime</th>
+            <th>endTime</th>
+            <th>batchStatus</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div class="outer-south">
+
+    <div id="executionInfo" class="inner-west">
+    </div>
+
+    <div class="inner-center">
+        <table id="steps">
+            <thead>
+            <tr>
+                <th>stepName</th>
+                <th>startTime</th>
+                <th>endTime</th>
+                <th>exitStatus</th>
+                <th>r</th>
+                <th>w</th>
+                <th>c</th>
+                <th>r</th>
+                <th>rs</th>
+                <th>ps</th>
+                <th>f</th>
+                <th>ws</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

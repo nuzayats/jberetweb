@@ -1,6 +1,7 @@
 package org.nailedtothex.jberetweb.model.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 
 /**
@@ -175,6 +176,7 @@ public class JobExecution {
         return result;
     }
 
+    @XmlTransient
     @ManyToOne
     @JoinColumn(name = "jobinstanceid", referencedColumnName = "jobinstanceid", nullable = false)
     public JobInstance getJobInstanceByJobinstanceid() {

@@ -7,12 +7,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.Tuple;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +16,8 @@ import java.util.List;
  */
 @Stateless
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-@Path("/JobExecutionReportService")
-public class JobExecutionReportService {
+@Path("/StepExecutionReportService/{executionId}")
+public class StepExecutionReportService {
     @EJB
     JobRepositoryService repositoryService;
     @EJB
@@ -29,15 +25,11 @@ public class JobExecutionReportService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DataTablesBean getJobExecutionReport(
-            @QueryParam("sEcho") Integer sEcho,
-            @QueryParam("iDisplayLength") Integer iDisplayLength,
-            @QueryParam("iDisplayStart") Integer iDisplayStart,
-            @QueryParam("sSortDir_0") String sSortDir_0) {
+    public DataTablesBean getStepExecutionReport(@QueryParam("sEcho") Integer sEcho, @PathParam("executionId") Integer executionId) {
 
-        List<Tuple> tuples = repositoryService.findJobListReport(sSortDir_0, iDisplayStart, iDisplayLength);
-        List<List<String>> aaData = dataTablesService.createAaDataWithDateTime(tuples);
-        Long count = repositoryService.countJobExecution();
+        List<Tuple> tuples = repositoryService.findStepListReport(executionId);
+        List<List<String>> aaData = dataTablesService.createAaDataWithTime(tuples);
+        int count = tuples.size();
 
         DataTablesBean dataTablesBean = new DataTablesBean();
         dataTablesBean.setsEcho(sEcho);
