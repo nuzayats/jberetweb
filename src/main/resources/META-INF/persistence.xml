@@ -2,27 +2,5 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
     <persistence-unit name="jberetweb-pu">
         <jta-data-source>${dataSourceName}</jta-data-source>
-        <class>org.nailedtothex.jberetweb.model.entity.JobExecution</class>
-        <class>org.nailedtothex.jberetweb.model.entity.JobInstance</class>
-        <class>org.nailedtothex.jberetweb.model.entity.PartitionExecution</class>
-        <class>org.nailedtothex.jberetweb.model.entity.StepExecution</class>
-        <properties>
-            <property name="toplink.jdbc.url" value="jdbc:postgresql://localhost:5432/jbatch"/>
-            <property name="toplink.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="toplink.jdbc.user" value="postgres"/>
-            <property name="toplink.jdbc.password" value="postgres"/>
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jbatch"/>
-            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="hibernate.connection.username" value="postgres"/>
-            <property name="hibernate.connection.password" value="postgres"/>
-            <property name="openjpa.ConnectionURL" value="jdbc:postgresql://localhost:5432/jbatch"/>
-            <property name="openjpa.ConnectionDriverName" value="org.postgresql.Driver"/>
-            <property name="openjpa.ConnectionUserName" value="postgres"/>
-            <property name="openjpa.ConnectionPassword" value="postgres"/>
-            <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/jbatch"/>
-            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="eclipselink.jdbc.user" value="postgres"/>
-            <property name="eclipselink.jdbc.password" value="postgres"/>
-        </properties>
     </persistence-unit>
 </persistence>
