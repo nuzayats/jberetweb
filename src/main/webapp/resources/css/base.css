@@ -1,0 +1,137 @@
+html {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+body {
+    height: 97%;
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', ​sans-serif;
+    color: #4e5255;
+    font-size: 12px;
+}
+
+div#container {
+    height: 98%;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table thead th {
+    background: linear-gradient(to bottom, #f9f9f9, #eee);
+}
+
+table th, table td {
+    border: 1px solid #cfcfcf;
+}
+
+table {
+    width: 100%;
+}
+
+div#jobExecutions table, div#stepInfo table, div#jobParameters table {
+    table-layout: fixed;
+}
+
+th.id, td.id {
+    width: 8em;
+}
+
+th.status, td.status {
+    width: 8em;
+}
+
+th.dateTime, td.dateTime {
+    width: 13em;
+}
+
+th.time, td.time {
+    width: 7em;
+}
+
+th.name, td.name {
+    width: 15em;
+}
+
+td.exception, td.dateTime, td.time, td.status {
+    text-align: center;
+}
+
+td.numeric {
+    text-align: right;
+}
+
+td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+tr.error {
+    color: crimson;
+    background-color: mistyrose;
+}
+
+div#jobParameters th.name, div#jobParameters td.name {
+    width: 40%;
+}
+
+div#jobExecutions {
+    height: 49%;
+}
+
+div#jobExecutionsCount {
+    float: left;
+}
+
+div#jobExecutions form#jobExecutionsForm table tbody tr.selected {
+    background: #eaf5fb;
+}
+
+div#jobExecutions tr.data:hover {
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+span.caption {
+    color: #a4a4a4;
+}
+
+div#jobExecutionsPagination {
+    float: right;
+    margin-right: 10px;
+}
+
+div#details {
+    margin-top: 0.5%;
+    height: 49%;
+}
+
+div#jobParameters {
+    width: 30%;
+    float: left;
+    height: 100%;
+}
+
+div#stepInfo {
+    width: 69%;
+    float: right;
+    height: 100%;
+}
+
+pre.stackTrace {
+    font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+    overflow: auto;
+    width: auto;
+    padding: 5px;
+    background-color: #eee;
+    margin-top: 0.2em;
+}
+
+div#jobParameters table td.long {
+    word-break: break-all;
+}
+
+div#executionException {
+    margin-top: 0.5em;
+}

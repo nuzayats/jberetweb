@@ -1,13 +1,10 @@
-package org.nailedtothex.jberetweb.model.entity;
+package org.nailedtothex.jberetweb.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
 
-/**
- * Created by kyle on 2014/03/28.
- */
 @Entity
-@Table(name = "job_instance", schema = "public", catalog = "jbatch")
+@Table(name = "job_instance")
 public class JobInstance {
     private Integer jobinstanceid;
     private Integer version;

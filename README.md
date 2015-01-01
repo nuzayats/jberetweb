@@ -9,6 +9,12 @@ jBeret job repository viewer
 - Oracle JDK7u51
 - PostgreSQL 9.2.4
 
+### Preconditions
+
+- JDBC job repository is registered as java:jboss/jdbc/JBatchDS
+- JSF project stage is defined in JNDI resource 'java:/env/jsf/ProjectStage' on the application server
+    - example: ./jboss-cli.sh --connect --command='/subsystem=naming/binding=java\:\/env\/jsf\/ProjectStage:add(binding-type=simple,value=Development,class=java.lang.String)'
+
 ### How to use
 
 1. git clone https://github.com/lbtc-xxx/jberetweb

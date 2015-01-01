@@ -1,14 +1,11 @@
-package org.nailedtothex.jberetweb.model.entity;
+package org.nailedtothex.jberetweb.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-/**
- * Created by kyle on 2014/03/28.
- */
 @Entity
-@Table(name = "step_execution", schema = "public", catalog = "jbatch")
+@Table(name = "step_execution")
 public class StepExecution {
     private Integer stepexecutionid;
     private Integer version;

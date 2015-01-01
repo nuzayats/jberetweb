@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head jsfc="h:head">
+    <link rel="stylesheet" href="resources/css/base.css" type="text/css"
+          jsfc="h:outputStylesheet" library="css" name="base.css"/>
+    <script type="text/javascript" src="resources/js/main.js"
+            jsfc="h:outputScript" library="js" name="main.js"></script>
+</head>
+<body jsfc="h:body">
+<f:metadata>
+    <f:viewAction action="#{logicBean.init()}"/>
+</f:metadata>
+
+<div id="container">
+    <div id="jobExecutions">
+        <span class="caption">Job Executions</span>
+        <h:form id="jobExecutionsForm">
+            <table>
+                <thead>
+                <tr>
+                    <th class="id">ID</th>
+                    <th>Name</th>
+                    <th class="dateTime">Start</th>
+                    <th class="dateTime">End</th>
+                    <th class="status">BatchStatus</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- sample data begin -->
+                <tr jsfc="ui:remove" class="data">
+                    <td class="id numeric">8654</td>
+                    <td>hogeJob</td>
+                    <td class="dateTime">2014-12-17 08:22:36</td>
+                    <td class="dateTime">2014-12-17 08:22:37</td>
+                    <td class="status">COMPLETED</td>
+                </tr>
+                <tr jsfc="ui:remove" class="data error">
+                    <td class="id numeric">8653</td>
+                    <td>hogeJob</td>
+                    <td class="dateTime">2014-12-17 08:22:36</td>
+                    <td class="dateTime">2014-12-17 08:22:37</td>
+                    <td class="status">FAILED</td>
+                </tr>
+                <!-- sample data end -->
+                <ui:repeat value="#{dataBean.jobExecutionTableRowDtos}" var="item">
+                    <tr onclick="onJobExecutionRowClick(this);"
+                        class="data #{logicBean.isSelectedJobExecution(item.jobExecutionId) ? 'selected' : null} #{item.batchStatus == 'FAILED' ? 'error' : null}">
+                        <td class="id numeric">
+                            #{item.jobExecutionId}
+                            <!-- Ugly but we need hidden commandButton because we have to invoke remote method via js -->
+                            <h:commandButton style="display: none;">
+                                <f:ajax listener="#{logicBean.selectJobExecution(item.jobExecutionId)}"
+                                        render=":stepExecutionsPg :jobParametersPg :jobExecutionsForm :executionException"/>
+                            </h:commandButton>
+                        </td>
+                        <td>#{item.jobName}</td>
+                        <td class="dateTime">
+                        <span jsfc="h:outputText" value="#{item.startTime}">
+                        yyyy-MM-dd HH:mm:ss
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </span>
+                        </td>
+                        <td class="dateTime">
+                        <span jsfc="h:outputText" value="#{item.endTime}">
+                        yyyy-MM-dd HH:mm:ss
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </span>
+                        </td>
+                        <td class="status">#{item.batchStatus}</td>
+                    </tr>
+                </ui:repeat>
+
+                </tbody>
+            </table>
+        </h:form>
+
+        <div id="jobExecutionsInfo">
+        </div>
+        <div id="jobExecutionsPagination">
+            <h:form id="jobExecutionsPaginationForm">
+                <input type="button" jsfc="h:commandButton"
+                       disabled="#{!dataBean.jobExecutionTablePaginator.previousPageAvailable}"
+                       value="&lt;&lt;"><f:ajax listener="#{logicBean.jobExecutionTableFirst}"
+                                                render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
+                <input type="button" jsfc="h:commandButton"
+                       disabled="#{!dataBean.jobExecutionTablePaginator.previousPageAvailable}"
+                       value="&lt;"><f:ajax listener="#{logicBean.jobExecutionTablePrevious}"
+                                            render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
+
+                <span jsfc="h:outputText" value="#{dataBean.jobExecutionTablePaginator.currentRangeBegin}">1</span>
+                -
+                <span jsfc="h:outputText" value="#{dataBean.jobExecutionTablePaginator.currentRangeEnd}">8</span>
+                of
+                <span jsfc="h:outputText" value="#{dataBean.jobExecutionCount}">26</span>
+
+                <input type="button" jsfc="h:commandButton"
+                       disabled="#{!dataBean.jobExecutionTablePaginator.nextPageAvailable}"
+                       value="&gt;"><f:ajax listener="#{logicBean.jobExecutionTableNext}"
+                                            render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
+                <input type="button" jsfc="h:commandButton"
+                       disabled="#{!dataBean.jobExecutionTablePaginator.nextPageAvailable}"
+                       value="&gt;&gt;"><f:ajax listener="#{logicBean.jobExecutionTableLast}"
+                                                render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
+            </h:form>
+        </div>
+    </div>
+    <div id="details">
+        <div id="jobParameters">
+            <span class="caption">Job Parameters</span>
+            <h:panelGroup id="jobParametersPg" layout="block">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="name">Name</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr jsfc="ui:repeat" value="#{dataBean.jobParameterDtos}" var="item">
+                        <td class="name">#{item.name}</td>
+                        <td class="long">#{item.value}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </h:panelGroup>
+        </div>
+        <div id="stepInfo">
+            <div id="stepExecutions">
+                <span class="caption">Step Executions</span>
+                <h:panelGroup id="stepExecutionsPg" layout="block">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="name">Name</th>
+                            <th class="time">Start</th>
+                            <th class="time">End</th>
+                            <th class="status">ExitStatus</th>
+                            <th title="Read Count">re</th>
+                            <th title="Write Count">wr</th>
+                            <th title="Commit Count">co</th>
+                            <th title="Rollback Count">ro</th>
+                            <th title="Read Skip Count">rs</th>
+                            <th title="Process Skip Count">ps</th>
+                            <th title="Filter Count">fi</th>
+                            <th title="Write Skip Count">ws</th>
+                            <th title="Execution Exception">ex</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <!-- sample data begin -->
+                        <tr jsfc="ui:remove">
+                            <td class="name">step1</td>
+                            <td class="time">07:23:10
+                            </td>
+                            <td class="time">07:23:10
+                            </td>
+                            <td class="status">COMPLETED</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="exception">-</td>
+                        </tr>
+                        <tr jsfc="ui:remove" class="error">
+                            <td class="name">step2</td>
+                            <td class="time">07:23:10
+                            </td>
+                            <td class="time">07:23:10
+                            </td>
+                            <td class="status">FAILED</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="numeric">0</td>
+                            <td class="exception">!</td>
+                        </tr>
+                        <!-- sample data end -->
+
+                        <ui:repeat value="#{dataBean.stepExecutions}" var="item">
+                            <tr class="#{item.executionexception != null ? 'error' : null}">
+                                <td class="name">#{item.stepname}</td>
+                                <td class="time">
+                        <span jsfc="h:outputText" value="#{item.starttime}">
+                        HH:mm:ss
+                            <f:convertDateTime type="date" pattern="HH:mm:ss"/>
+                        </span>
+                                </td>
+                                <td class="time">
+                        <span jsfc="h:outputText" value="#{item.endtime}">
+                        HH:mm:ss
+                            <f:convertDateTime type="date" pattern="HH:mm:ss"/>
+                        </span>
+                                </td>
+                                <td class="status">#{item.exitstatus}</td>
+                                <td class="numeric">#{item.readcount}</td>
+                                <td class="numeric">#{item.writecount}</td>
+                                <td class="numeric">#{item.commitcount}</td>
+                                <td class="numeric">#{item.rollbackcount}</td>
+                                <td class="numeric">#{item.readskipcount}</td>
+                                <td class="numeric">#{item.processskipcount}</td>
+                                <td class="numeric">#{item.filtercount}</td>
+                                <td class="numeric">#{item.writeskipcount}</td>
+                                <td class="exception">#{item.executionexception == null ? '-' : '!'}</td>
+                            </tr>
+                        </ui:repeat>
+
+                        </tbody>
+                    </table>
+                </h:panelGroup>
+            </div>
+            <div id="executionException" jsfc="h:panelGroup" layout="block">
+                <div jsfc="ui:fragment" rendered="#{dataBean.executionException != null}">
+                    <span class="caption">Execution Exception</span>
+                    <pre class="stackTrace">#{dataBean.executionException}</pre>
+                    <div jsfc="ui:remove"><pre class="stackTrace">java.lang.NullPointerException
+at org.apache.roller.weblogger.business.search.operations.IndexOperation.getDocument(IndexOperation.java:138)
+at org.apache.roller.weblogger.business.search.operations.ReIndexEntryOperation.doRun(ReIndexEntryOperation.java:91)
+at org.apache.roller.weblogger.business.search.operations.WriteToIndexOperation.run(WriteToIndexOperation.java:42)
+at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+at java.util.concurrent.FutureTask.run(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+at java.lang.Thread.run(Unknown Source)</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

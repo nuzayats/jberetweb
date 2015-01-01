@@ -1,14 +1,11 @@
-package org.nailedtothex.jberetweb.model.entity;
+package org.nailedtothex.jberetweb.entity;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 
-/**
- * Created by kyle on 2014/03/28.
- */
 @Entity
-@Table(name = "job_execution", schema = "public", catalog = "jbatch")
+@Table(name = "job_execution")
 public class JobExecution {
     private Integer jobexecutionid;
     private Long jobinstanceid;

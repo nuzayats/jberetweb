@@ -1,12 +1,9 @@
-package org.nailedtothex.jberetweb.model.entity;
+package org.nailedtothex.jberetweb.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-/**
- * Created by kyle on 2014/03/28.
- */
 public class PartitionExecutionPK implements Serializable {
     private Integer partitionexecutionid;
     private Long stepexecutionid;

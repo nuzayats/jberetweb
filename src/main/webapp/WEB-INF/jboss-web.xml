@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+    <resource-ref>
+        <res-ref-name>jsf/ProjectStage</res-ref-name>
+        <res-type>java.lang.String</res-type>
+        <jndi-name>java:/env/jsf/ProjectStage</jndi-name>
+    </resource-ref>
+</jboss-web>

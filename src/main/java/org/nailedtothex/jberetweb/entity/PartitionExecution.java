@@ -1,13 +1,10 @@
-package org.nailedtothex.jberetweb.model.entity;
+package org.nailedtothex.jberetweb.entity;
 
 import javax.persistence.*;
 import java.util.Arrays;
 
-/**
- * Created by kyle on 2014/03/28.
- */
 @Entity
-@Table(name = "partition_execution", schema = "public", catalog = "jbatch")
+@Table(name = "partition_execution")
 @IdClass(PartitionExecutionPK.class)
 public class PartitionExecution {
     private Integer partitionexecutionid;

@@ -7,4 +7,34 @@
         ]]></query>
     </named-query>
 
+    <named-query name="findJobExecutionTableRow">
+        <query><![CDATA[
+            SELECT
+                NEW org.nailedtothex.jberetweb.dto.JobExecutionTableRowDto(
+                    je.jobexecutionid,
+                    je.jobInstanceByJobinstanceid.jobname,
+                    je.starttime,
+                    je.endtime,
+                    je.batchstatus
+                )
+            FROM
+                JobExecution je
+            ORDER BY
+                je.jobexecutionid DESC
+        ]]></query>
+    </named-query>
+
+    <named-query name="findStepExecutionsByJobExecutionId">
+        <query><![CDATA[
+            SELECT
+                se
+            FROM
+                StepExecution se
+            WHERE
+                se.jobexecutionid = :jobExecutionId
+            ORDER BY
+                se.stepexecutionid
+        ]]></query>
+    </named-query>
+
 </entity-mappings>
