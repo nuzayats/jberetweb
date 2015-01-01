@@ -24,5 +24,5 @@ jBeret job repository viewer
 
 ### Function
 
-- It shows that recent job executions with jQuery DataTables.
+- It shows that recent job executions with tables.
     - comes with executionId, jobName, startTime, endTime, batchStatus
