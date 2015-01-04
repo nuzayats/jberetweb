@@ -12,6 +12,7 @@
             SELECT
                 NEW org.nailedtothex.jberetweb.dto.JobExecutionTableRowDto(
                     je.jobexecutionid,
+                    je.jobinstanceid,
                     je.jobInstanceByJobinstanceid.jobname,
                     je.starttime,
                     je.endtime,

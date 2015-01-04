@@ -39,7 +39,8 @@
             <table>
                 <thead>
                 <tr>
-                    <th class="id">ID</th>
+                    <th class="id">Execution ID</th>
+                    <th class="id">Instance ID</th>
                     <th>Name</th>
                     <th class="dateTime">Start</th>
                     <th class="dateTime">End</th>
@@ -51,6 +52,7 @@
                 <!-- sample data begin -->
                 <tr jsfc="ui:remove" class="data">
                     <td class="id numeric clickable">8654</td>
+                    <td class="id numeric clickable">8654</td>
                     <td class="clickable">hogeJob</td>
                     <td class="dateTime clickable">2014-12-17 08:22:36</td>
                     <td class="dateTime clickable">2014-12-17 08:22:37</td>
@@ -58,6 +60,7 @@
                     <td class="action"></td>
                 </tr>
                 <tr jsfc="ui:remove" class="data error">
+                    <td class="id numeric clickable">8653</td>
                     <td class="id numeric clickable">8653</td>
                     <td class="clickable">hogeJob</td>
                     <td class="dateTime clickable">2014-12-17 08:22:36</td>
@@ -76,6 +79,7 @@
                                         render=":stepExecutionsPg :jobParametersPg :jobExecutionsForm :executionException"/>
                             </h:commandButton>
                         </td>
+                        <td class="id numeric clickable" onclick="onJobExecutionRowClick(this);">#{item.jobInstanceId}</td>
                         <td class="clickable" onclick="onJobExecutionRowClick(this);">#{item.jobName}</td>
                         <td class="dateTime clickable">
                         <span jsfc="h:outputText" value="#{item.startTime}">
