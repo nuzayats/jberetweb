@@ -1,24 +1,49 @@
 package org.nailedtothex.jberetweb.logic;
 
+import org.nailedtothex.jberetweb.dto.JobExecutionAction;
 import org.nailedtothex.jberetweb.dto.JobExecutionTableRowDto;
 import org.nailedtothex.jberetweb.dto.JobParameterDto;
 import org.nailedtothex.jberetweb.entity.JobExecution;
 import org.nailedtothex.jberetweb.entity.StepExecution;
 
+import javax.batch.operations.JobOperator;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Named
 @RequestScoped
-public class LogicBean {
+public class IndexRequestBean {
 
     private static final int ROWS_IN_SINGLE_PAGE = 10;
+
+    private static final SelectItem[] ACTIONS_FOR_COMPLETED_OR_ABANDONED = new SelectItem[]{
+            new SelectItem(JobExecutionAction.SELECT, JobExecutionAction.SELECT.getLabel()),
+            new SelectItem(JobExecutionAction.RE_EXECUTE, JobExecutionAction.RE_EXECUTE.getLabel())
+    };
+
+    private static final SelectItem[] ACTIONS_FOR_STOPPED_OR_FAILED = new SelectItem[]{
+            new SelectItem(JobExecutionAction.SELECT, JobExecutionAction.SELECT.getLabel()),
+            new SelectItem(JobExecutionAction.RESTART, JobExecutionAction.RESTART.getLabel()),
+            new SelectItem(JobExecutionAction.ABANDON, JobExecutionAction.ABANDON.getLabel()),
+            new SelectItem(JobExecutionAction.RE_EXECUTE, JobExecutionAction.RE_EXECUTE.getLabel())
+    };
+
+    private static final SelectItem[] ACTIONS_FOR_STARTING_OR_STARTED = new SelectItem[]{
+            new SelectItem(JobExecutionAction.SELECT, JobExecutionAction.SELECT.getLabel()),
+            new SelectItem(JobExecutionAction.STOP, JobExecutionAction.STOP.getLabel()),
+            new SelectItem(JobExecutionAction.RE_EXECUTE, JobExecutionAction.RE_EXECUTE.getLabel()),
+    };
+
     @Inject
-    DataBean dataBean;
+    IndexViewBean dataBean;
+    @Inject
+    JBeretWebSingleton singleton;
     @PersistenceContext
     EntityManager em;
 
@@ -96,5 +121,59 @@ public class LogicBean {
 
     public boolean isSelectedJobExecution(Integer jobExecutionId) {
         return dataBean.getJobExecution() != null && Objects.equals(jobExecutionId, dataBean.getJobExecution().getJobexecutionid());
+    }
+
+    public SelectItem[] getSelectItems(String hoge) {
+        switch (hoge) {
+            case "COMPLETED":
+            case "ABANDONED":
+                return ACTIONS_FOR_COMPLETED_OR_ABANDONED;
+            case "STOPPED":
+            case "FAILED":
+                return ACTIONS_FOR_STOPPED_OR_FAILED;
+            case "STARTING":
+            case "STARTED":
+                return ACTIONS_FOR_STARTING_OR_STARTED;
+        }
+        return new SelectItem[]{new SelectItem("value", "label")};
+    }
+
+    public void selectAction(JobExecutionTableRowDto d) throws NamingException {
+        long executionId = (long) d.getJobExecutionId();
+        switch (d.getAction()) {
+            case SELECT:
+                // nop
+                return;
+            case STOP:
+                stop(executionId);
+                break;
+            case ABANDON:
+                abandon(executionId);
+                break;
+            case RESTART:
+                // not implemented yet
+                break;
+        }
+        fetch();
+    }
+
+    public void stop(final long executionId) throws NamingException {
+        singleton.doWorkWithJobOperator(new JobOperatorWork<Object>() {
+            @Override
+            public Object doWorkWithJobOperator(JobOperator jobOperator) {
+                jobOperator.stop(executionId);
+                return null;
+            }
+        });
+    }
+
+    public void abandon(final long executionId) throws NamingException {
+        singleton.doWorkWithJobOperator(new JobOperatorWork<Object>() {
+            @Override
+            public Object doWorkWithJobOperator(JobOperator jobOperator) {
+                jobOperator.abandon(executionId);
+                return null;
+            }
+        });
     }
 }

@@ -26,7 +26,7 @@ table th, table td {
     border: 1px solid #cfcfcf;
 }
 
-table {
+div#jobExecutions table, div#jobParameters table, div#stepExecutions table {
     width: 100%;
 }
 
@@ -52,6 +52,14 @@ th.time, td.time {
 
 th.name, td.name {
     width: 15em;
+}
+
+th.action, td.action {
+    width: 7em;
+}
+
+td.action select {
+    width: 6em;
 }
 
 td.exception, td.dateTime, td.time, td.status {
@@ -88,9 +96,12 @@ div#jobExecutions form#jobExecutionsForm table tbody tr.selected {
     background: #eaf5fb;
 }
 
+div#jobExecutions tr.data td.clickable:hover {
+    cursor: pointer;
+}
+
 div#jobExecutions tr.data:hover {
     background: #f9f9f9;
-    cursor: pointer;
 }
 
 span.caption {
@@ -100,6 +111,15 @@ span.caption {
 div#jobExecutionsPagination {
     float: right;
     margin-right: 10px;
+}
+
+div#jobExecutionsInfo {
+    float: left;
+}
+
+div#startJob {
+    float: none;
+    margin-bottom: 10px;
 }
 
 div#details {
@@ -134,4 +154,14 @@ div#jobParameters table td.long {
 
 div#executionException {
     margin-top: 0.5em;
+}
+
+label {
+    margin-right: 0.5em;
+}
+
+form#newJobParameterForm label {
+    display: block;
+    float: left;
+    width: 4em;
 }

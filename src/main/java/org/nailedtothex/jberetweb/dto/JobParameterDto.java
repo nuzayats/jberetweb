@@ -55,4 +55,13 @@ public class JobParameterDto implements Serializable, Comparable<JobParameterDto
     public int compareTo(JobParameterDto o) {
         return name.compareTo(o.name);
     }
+
+    public JobParameterDto() {
+    }
+
+    public JobParameterDto(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 }
+

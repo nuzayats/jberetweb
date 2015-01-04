@@ -21,7 +21,7 @@ public class TablePaginator implements Serializable {
     }
 
     /**
-     * @return false if previous page available.
+     * @return true if previous page available.
      */
     public boolean isPreviousPageAvailable() {
         return getTotalPages() != 0 && currentPage > 1;

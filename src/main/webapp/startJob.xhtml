@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<head jsfc="h:head">
+    <link rel="stylesheet" href="resources/css/base.css" type="text/css"
+          jsfc="h:outputStylesheet" library="css" name="base.css"/>
+    <script type="text/javascript" src="resources/js/main.js"
+            jsfc="h:outputScript" library="js" name="main.js"></script>
+    <script type="text/javascript">
+        function focusOnNameIfSucceeded(data) {
+            if (data.status == 'success') {
+                document.getElementById('newJobParameterForm:newJobParameterName').focus();
+            }
+        }
+    </script>
+    <title>Start Job</title>
+</head>
+<body jsfc="h:body">
+<f:metadata>
+    <f:viewAction action="#{startJobRequestBean.init}"/>
+</f:metadata>
+
+<div id="container">
+    <div id="startJob" jsfc="h:panelGroup" layout="block">
+        <div jsfc="h:panelGroup" layout="block">
+            <span class="caption">Start Job</span>
+
+            <h:form id="jobForm">
+                <div style="margin-top: 10px; ">
+                    <label for="jobName" jsfc="h:outputLabel">Job Name:</label>
+                    <input type="text" jsfc="h:inputText" value="#{startJobViewBean.jobName}" p:autofocus="autofocus"
+                           required="true" requiredMessage="Job Name is required" id="jobName"></input>
+                    <h:message for="jobName" style="margin-left: 1em;" id="jobNameMsg"/>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <input type="button" value="start" jsfc="h:commandButton" style="display: none;" id="startButton">
+                        <f:ajax render="jobNameMsg :msgs newJobParameterForm:newJobParameterNameMsg"
+                                execute="jobName"
+                                listener="#{startJobRequestBean.start}"/>
+                    </input>
+                </div>
+            </h:form>
+
+            <div>
+                <div jsfc="h:panelGroup" layout="block" id="startJobParameters" style="margin-top: 20px;">
+                    <label jsfc="h:outputLabel">Job Parameter:</label>
+                    <h:form id="newJobParameterForm">
+                        <div style="margin-top: 10px;">
+                            <div>
+                                <label jsfc="h:outputLabel" for="newJobParameterName">Name:</label>
+                                <input type="text" jsfc="h:inputText" id="newJobParameterName"
+                                       value="#{startJobViewBean.newJobParameterName}"
+                                       required="true" requiredMessage="Name is required"
+                                       validator="#{startJobRequestBean.validateJobParameterName}">
+                                </input>
+                                <h:message for="newJobParameterName" id="newJobParameterNameMsg"
+                                           style="margin-left: 1em;"/>
+                            </div>
+                            <div style="margin-top: 1em;">
+                                <label jsfc="h:outputLabel" for="newJobParameterValue">Value:</label>
+                                <input type="text" jsfc="h:inputText" id="newJobParameterValue"
+                                       onkeydown="if (event.keyCode == 13) document.getElementById('newJobParameterForm:addJobParameterButton').click()"
+                                       value="#{startJobViewBean.newJobParameterValue}">
+                                </input>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1em;">
+                            <input type="button" value="add" jsfc="h:commandButton" id="addJobParameterButton">
+                                <f:ajax execute="newJobParameterName newJobParameterValue"
+                                        render=":jobParameterForm newJobParameterNameMsg newJobParameterName newJobParameterValue :msgs jobForm:jobNameMsg"
+                                        onevent="focusOnNameIfSucceeded"
+                                        listener="#{startJobRequestBean.addJobParameter}"/>
+                            </input>
+                        </div>
+                    </h:form>
+
+                    <h:form id="jobParameterForm">
+                        <h:panelGroup layout="block" id="jobParameterTable">
+                            <table style="margin-top: 2em;">
+                                <thead>
+                                <tr>
+                                    <th>name</th>
+                                    <th>value</th>
+                                    <th>delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr jsfc="ui:repeat" value="#{startJobViewBean.jobParameters}" var="v" varStatus="s">
+                                    <td>
+                                        #{v.name}
+                                    </td>
+                                    <td>
+                                        #{v.value}
+                                    </td>
+                                    <td>
+                                        <input type="button" value="delete" jsfc="h:commandButton">
+                                            <f:ajax render="jobParameterForm:jobParameterTable"
+                                                    listener="#{startJobRequestBean.removeJobParameter(s.index)}"/>
+                                        </input>
+                                    </td>
+                                </tr>
+                                <tr jsfc="ui:fragment" rendered="#{startJobViewBean.jobParameters.isEmpty()}">
+                                    <td colspan="3">
+                                        <span class="caption">No Job Parameter</span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </h:panelGroup>
+                    </h:form>
+                    <button style="margin-top: 2em;"
+                            onclick="document.getElementById('jobForm:startButton').click();">Start
+                    </button>
+                    <h:messages id="msgs" globalOnly="true"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

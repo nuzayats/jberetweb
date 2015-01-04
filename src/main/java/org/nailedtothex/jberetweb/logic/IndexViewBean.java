@@ -12,7 +12,7 @@ import java.util.List;
 
 @Named
 @ViewScoped
-public class DataBean implements Serializable {
+public class IndexViewBean implements Serializable {
 
     Long jobExecutionCount;
     JobExecution jobExecution;
@@ -21,6 +21,15 @@ public class DataBean implements Serializable {
     List<StepExecution> stepExecutions;
     TablePaginator jobExecutionTablePaginator;
     String executionException;
+    boolean startJobVisible;
+
+    public boolean isStartJobVisible() {
+        return startJobVisible;
+    }
+
+    public void setStartJobVisible(boolean startJobVisible) {
+        this.startJobVisible = startJobVisible;
+    }
 
     public String getExecutionException() {
         return executionException;

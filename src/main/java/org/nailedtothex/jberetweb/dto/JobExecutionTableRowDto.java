@@ -9,6 +9,7 @@ public class JobExecutionTableRowDto implements Serializable {
     Date startTime;
     Date endTime;
     String batchStatus;
+    JobExecutionAction action = JobExecutionAction.SELECT;
 
     public JobExecutionTableRowDto(Integer jobExecutionId, String jobName, Date startTime, Date endTime, String batchStatus) {
         this.jobExecutionId = jobExecutionId;
@@ -19,6 +20,14 @@ public class JobExecutionTableRowDto implements Serializable {
     }
 
     public JobExecutionTableRowDto() {
+    }
+
+    public JobExecutionAction getAction() {
+        return action;
+    }
+
+    public void setAction(JobExecutionAction action) {
+        this.action = action;
     }
 
     public Integer getJobExecutionId() {
@@ -59,5 +68,17 @@ public class JobExecutionTableRowDto implements Serializable {
 
     public void setBatchStatus(String batchStatus) {
         this.batchStatus = batchStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "JobExecutionTableRowDto{" +
+                "jobExecutionId=" + jobExecutionId +
+                ", jobName='" + jobName + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", batchStatus='" + batchStatus + '\'' +
+                ", action=" + action +
+                '}';
     }
 }

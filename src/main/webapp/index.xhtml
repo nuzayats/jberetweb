@@ -2,23 +2,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <head jsfc="h:head">
     <link rel="stylesheet" href="resources/css/base.css" type="text/css"
           jsfc="h:outputStylesheet" library="css" name="base.css"/>
     <script type="text/javascript" src="resources/js/main.js"
             jsfc="h:outputScript" library="js" name="main.js"></script>
+    <title>jberetweb</title>
 </head>
 <body jsfc="h:body">
 <f:metadata>
-    <f:viewAction action="#{logicBean.init()}"/>
+    <f:viewAction action="#{indexRequestBean.init()}"/>
 </f:metadata>
 
 <div id="container">
     <div id="jobExecutions">
-        <span class="caption">Job Executions</span>
+        <div style="float: left;">
+            <span class="caption">Job Executions</span>
+        </div>
+        <div style="float: right;">
+            <h:form id="commandForm">
+                <a href="#" jsfc="h:commandLink" id="refresh"
+                   title="Refresh the page keeping current page. New executions won't appear.">
+                    <f:ajax listener="#{indexRequestBean.fetch}" render=":jobExecutionsForm"/>
+                    Refresh</a>
+                <a href="#"
+                   onclick="window.open('startJob.xhtml', 'Start Job', 'width=640,height=480'); return false;">Start Job</a>
+            </h:form>
+        </div>
+        <div style="clear: both;"></div>
         <h:form id="jobExecutionsForm">
             <table>
                 <thead>
@@ -28,50 +44,60 @@
                     <th class="dateTime">Start</th>
                     <th class="dateTime">End</th>
                     <th class="status">BatchStatus</th>
+                    <th class="action">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- sample data begin -->
                 <tr jsfc="ui:remove" class="data">
-                    <td class="id numeric">8654</td>
-                    <td>hogeJob</td>
-                    <td class="dateTime">2014-12-17 08:22:36</td>
-                    <td class="dateTime">2014-12-17 08:22:37</td>
-                    <td class="status">COMPLETED</td>
+                    <td class="id numeric clickable">8654</td>
+                    <td class="clickable">hogeJob</td>
+                    <td class="dateTime clickable">2014-12-17 08:22:36</td>
+                    <td class="dateTime clickable">2014-12-17 08:22:37</td>
+                    <td class="status clickable">COMPLETED</td>
+                    <td class="action"></td>
                 </tr>
                 <tr jsfc="ui:remove" class="data error">
-                    <td class="id numeric">8653</td>
-                    <td>hogeJob</td>
-                    <td class="dateTime">2014-12-17 08:22:36</td>
-                    <td class="dateTime">2014-12-17 08:22:37</td>
-                    <td class="status">FAILED</td>
+                    <td class="id numeric clickable">8653</td>
+                    <td class="clickable">hogeJob</td>
+                    <td class="dateTime clickable">2014-12-17 08:22:36</td>
+                    <td class="dateTime clickable">2014-12-17 08:22:37</td>
+                    <td class="status clickable">FAILED</td>
+                    <td class="action"></td>
                 </tr>
                 <!-- sample data end -->
-                <ui:repeat value="#{dataBean.jobExecutionTableRowDtos}" var="item">
-                    <tr onclick="onJobExecutionRowClick(this);"
-                        class="data #{logicBean.isSelectedJobExecution(item.jobExecutionId) ? 'selected' : null} #{item.batchStatus == 'FAILED' ? 'error' : null}">
-                        <td class="id numeric">
+                <ui:repeat value="#{indexViewBean.jobExecutionTableRowDtos}" var="item">
+                    <tr class="data #{indexRequestBean.isSelectedJobExecution(item.jobExecutionId) ? 'selected' : null} #{item.batchStatus == 'FAILED' ? 'error' : null}">
+                        <td class="id numeric clickable" onclick="onJobExecutionRowClick(this);">
                             #{item.jobExecutionId}
                             <!-- Ugly but we need hidden commandButton because we have to invoke remote method via js -->
                             <h:commandButton style="display: none;">
-                                <f:ajax listener="#{logicBean.selectJobExecution(item.jobExecutionId)}"
+                                <f:ajax listener="#{indexRequestBean.selectJobExecution(item.jobExecutionId)}"
                                         render=":stepExecutionsPg :jobParametersPg :jobExecutionsForm :executionException"/>
                             </h:commandButton>
                         </td>
-                        <td>#{item.jobName}</td>
-                        <td class="dateTime">
+                        <td class="clickable" onclick="onJobExecutionRowClick(this);">#{item.jobName}</td>
+                        <td class="dateTime clickable">
                         <span jsfc="h:outputText" value="#{item.startTime}">
                         yyyy-MM-dd HH:mm:ss
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </span>
                         </td>
-                        <td class="dateTime">
+                        <td class="dateTime clickable" onclick="onJobExecutionRowClick(this);">
                         <span jsfc="h:outputText" value="#{item.endTime}">
                         yyyy-MM-dd HH:mm:ss
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </span>
                         </td>
-                        <td class="status">#{item.batchStatus}</td>
+                        <td class="status clickable" onclick="onJobExecutionRowClick(this);">#{item.batchStatus}</td>
+                        <td class="action">
+                            <h:selectOneMenu value="#{item.action}" p:autocomplete="off">
+                                <f:ajax listener="#{indexRequestBean.selectAction(item)}"
+                                        render=":jobExecutionsForm :msgs"
+                                        execute="@this"/>
+                                <f:selectItems value="#{indexRequestBean.getSelectItems(item.batchStatus)}"/>
+                            </h:selectOneMenu>
+                        </td>
                     </tr>
                 </ui:repeat>
 
@@ -80,31 +106,33 @@
         </h:form>
 
         <div id="jobExecutionsInfo">
+            <h:messages id="msgs" globalOnly="true"/>
         </div>
+
         <div id="jobExecutionsPagination">
             <h:form id="jobExecutionsPaginationForm">
                 <input type="button" jsfc="h:commandButton"
-                       disabled="#{!dataBean.jobExecutionTablePaginator.previousPageAvailable}"
-                       value="&lt;&lt;"><f:ajax listener="#{logicBean.jobExecutionTableFirst}"
+                       disabled="#{!indexViewBean.jobExecutionTablePaginator.previousPageAvailable}"
+                       value="&lt;&lt;"><f:ajax listener="#{indexRequestBean.jobExecutionTableFirst}"
                                                 render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
                 <input type="button" jsfc="h:commandButton"
-                       disabled="#{!dataBean.jobExecutionTablePaginator.previousPageAvailable}"
-                       value="&lt;"><f:ajax listener="#{logicBean.jobExecutionTablePrevious}"
+                       disabled="#{!indexViewBean.jobExecutionTablePaginator.previousPageAvailable}"
+                       value="&lt;"><f:ajax listener="#{indexRequestBean.jobExecutionTablePrevious}"
                                             render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
 
-                <span jsfc="h:outputText" value="#{dataBean.jobExecutionTablePaginator.currentRangeBegin}">1</span>
+                <span jsfc="h:outputText" value="#{indexViewBean.jobExecutionTablePaginator.currentRangeBegin}">1</span>
                 -
-                <span jsfc="h:outputText" value="#{dataBean.jobExecutionTablePaginator.currentRangeEnd}">8</span>
+                <span jsfc="h:outputText" value="#{indexViewBean.jobExecutionTablePaginator.currentRangeEnd}">8</span>
                 of
-                <span jsfc="h:outputText" value="#{dataBean.jobExecutionCount}">26</span>
+                <span jsfc="h:outputText" value="#{indexViewBean.jobExecutionCount}">26</span>
 
                 <input type="button" jsfc="h:commandButton"
-                       disabled="#{!dataBean.jobExecutionTablePaginator.nextPageAvailable}"
-                       value="&gt;"><f:ajax listener="#{logicBean.jobExecutionTableNext}"
+                       disabled="#{!indexViewBean.jobExecutionTablePaginator.nextPageAvailable}"
+                       value="&gt;"><f:ajax listener="#{indexRequestBean.jobExecutionTableNext}"
                                             render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
                 <input type="button" jsfc="h:commandButton"
-                       disabled="#{!dataBean.jobExecutionTablePaginator.nextPageAvailable}"
-                       value="&gt;&gt;"><f:ajax listener="#{logicBean.jobExecutionTableLast}"
+                       disabled="#{!indexViewBean.jobExecutionTablePaginator.nextPageAvailable}"
+                       value="&gt;&gt;"><f:ajax listener="#{indexRequestBean.jobExecutionTableLast}"
                                                 render=":jobExecutionsForm :jobExecutionsPaginationForm"/></input>
             </h:form>
         </div>
@@ -121,7 +149,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr jsfc="ui:repeat" value="#{dataBean.jobParameterDtos}" var="item">
+                    <tr jsfc="ui:repeat" value="#{indexViewBean.jobParameterDtos}" var="item">
                         <td class="name">#{item.name}</td>
                         <td class="long">#{item.value}</td>
                     </tr>
@@ -129,6 +157,7 @@
                 </table>
             </h:panelGroup>
         </div>
+
         <div id="stepInfo">
             <div id="stepExecutions">
                 <span class="caption">Step Executions</span>
@@ -190,7 +219,7 @@
                         </tr>
                         <!-- sample data end -->
 
-                        <ui:repeat value="#{dataBean.stepExecutions}" var="item">
+                        <ui:repeat value="#{indexViewBean.stepExecutions}" var="item">
                             <tr class="#{item.executionexception != null ? 'error' : null}">
                                 <td class="name">#{item.stepname}</td>
                                 <td class="time">
@@ -223,9 +252,9 @@
                 </h:panelGroup>
             </div>
             <div id="executionException" jsfc="h:panelGroup" layout="block">
-                <div jsfc="ui:fragment" rendered="#{dataBean.executionException != null}">
+                <div jsfc="ui:fragment" rendered="#{indexViewBean.executionException != null}">
                     <span class="caption">Execution Exception</span>
-                    <pre class="stackTrace">#{dataBean.executionException}</pre>
+                    <pre class="stackTrace">#{indexViewBean.executionException}</pre>
                     <div jsfc="ui:remove"><pre class="stackTrace">java.lang.NullPointerException
 at org.apache.roller.weblogger.business.search.operations.IndexOperation.getDocument(IndexOperation.java:138)
 at org.apache.roller.weblogger.business.search.operations.ReIndexEntryOperation.doRun(ReIndexEntryOperation.java:91)
