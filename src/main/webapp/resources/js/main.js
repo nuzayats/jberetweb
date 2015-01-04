@@ -8,12 +8,12 @@ function onSelectAction(e) {
     var executionId;
     if (type == 'RESTART') {
         executionId = getExecutionId(e);
-        window.open('startJob.xhtml?restart=' + executionId, 'Restart Job', 'width=640,height=480');
+        window.open('startJob.xhtml?restart=' + executionId, 'Restart Job', 'width=640,height=480,scrollbars=yes');
         return false;
     }
     if (type == 'RE_EXECUTE') {
         executionId = getExecutionId(e);
-        window.open('startJob.xhtml?reexec=' + executionId, 'Start Job', 'width=640,height=480');
+        window.open('startJob.xhtml?reexec=' + executionId, 'Start Job', 'width=640,height=480,scrollbars=yes');
         return false;
     }
 
