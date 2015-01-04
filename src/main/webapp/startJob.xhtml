@@ -19,25 +19,37 @@
             }
         }
     </script>
-    <title>Start Job</title>
+    <title>#{startJobRequestBean.restart ? 'Restart' : 'Start'} Job</title>
 </head>
 <body jsfc="h:body">
 <f:metadata>
+    <f:viewParam name="restart" value="#{startJobRequestBean.restartJobExecutionId}"/>
     <f:viewAction action="#{startJobRequestBean.init}"/>
 </f:metadata>
 
 <div id="container">
     <div id="startJob" jsfc="h:panelGroup" layout="block">
         <div jsfc="h:panelGroup" layout="block">
-            <span class="caption">Start Job</span>
+            <span class="caption">
+                #{startJobRequestBean.restart ? 'Restart' : 'Start'} Job
+            </span>
 
             <h:form id="jobForm">
                 <div style="margin-top: 10px; ">
                     <label for="jobName" jsfc="h:outputLabel">Job Name:</label>
                     <input type="text" jsfc="h:inputText" value="#{startJobViewBean.jobName}" p:autofocus="autofocus"
-                           required="true" requiredMessage="Job Name is required" id="jobName"></input>
+                           disabled="#{startJobRequestBean.restart}"
+                           required="true" requiredMessage="Job Name is required" id="jobName">
+                    </input>
                     <h:message for="jobName" style="margin-left: 1em;" id="jobNameMsg"/>
                 </div>
+
+                <ui:fragment rendered="#{startJobRequestBean.restart}">
+                    <div style="margin-top: 5px; ">
+                        <label jsfc="h:outputLabel">Previous Execution ID:</label>
+                        <span jsfc="h:outputText" value="#{startJobViewBean.oldJobExecution.executionId}"></span>
+                    </div>
+                </ui:fragment>
 
                 <div style="margin-top: 20px;">
                     <input type="button" value="start" jsfc="h:commandButton" style="display: none;" id="startButton">
@@ -118,7 +130,8 @@
                         </h:panelGroup>
                     </h:form>
                     <button style="margin-top: 2em;"
-                            onclick="document.getElementById('jobForm:startButton').click();">Start
+                            onclick="document.getElementById('jobForm:startButton').click();">
+                            #{startJobRequestBean.restart ? 'Restart' : 'Start'}
                     </button>
                     <h:messages id="msgs" globalOnly="true"/>
                 </div>

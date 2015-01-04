@@ -3,6 +3,7 @@ package org.nailedtothex.jberetweb.logic;
 import org.nailedtothex.jberetweb.dto.JobParameterDto;
 
 import javax.batch.operations.JobOperator;
+import javax.batch.runtime.JobExecution;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -26,10 +27,40 @@ public class StartJobRequestBean {
     StartJobViewBean startJobViewBean;
     @Inject
     JBeretWebSingleton singleton;
+    Long restartJobExecutionId;
 
-    public void init() {
+    public Long getRestartJobExecutionId() {
+        return restartJobExecutionId;
+    }
+
+    public void setRestartJobExecutionId(Long restartJobExecutionId) {
+        this.restartJobExecutionId = restartJobExecutionId;
+    }
+
+    public void init() throws NamingException {
         List<JobParameterDto> params = new ArrayList<>();
+
+        if (restartJobExecutionId != null) {
+            final JobExecution jobExecution = singleton.doWorkWithJobOperator(new JobOperatorWork<JobExecution>() {
+                @Override
+                public JobExecution doWorkWithJobOperator(JobOperator jobOperator) {
+                    return jobOperator.getJobExecution(restartJobExecutionId);
+                }
+            });
+            startJobViewBean.setOldJobExecution(jobExecution);
+            startJobViewBean.setJobName(jobExecution.getJobName());
+
+            for (Object o : jobExecution.getJobParameters().keySet()) {
+                String key = String.valueOf(o);
+                params.add(new JobParameterDto(key, jobExecution.getJobParameters().getProperty(key)));
+            }
+        }
+
         startJobViewBean.setJobParameters(params);
+    }
+
+    public boolean isRestart() {
+        return startJobViewBean.getOldJobExecution() != null;
     }
 
     public void addJobParameter() {
@@ -60,14 +91,29 @@ public class StartJobRequestBean {
         }
 
         try {
-            final Long executionId = singleton.doWorkWithJobOperator(new JobOperatorWork<Long>() {
-                @Override
-                public Long doWorkWithJobOperator(JobOperator jobOperator) {
-                    return jobOperator.start(startJobViewBean.getJobName(), props);
-                }
-            });
+            final Long executionId;
+            final StringBuilder msg = new StringBuilder("job ");
+
+            if (!isRestart()) {
+                executionId = singleton.doWorkWithJobOperator(new JobOperatorWork<Long>() {
+                    @Override
+                    public Long doWorkWithJobOperator(JobOperator jobOperator) {
+                        return jobOperator.start(startJobViewBean.getJobName(), props);
+                    }
+                });
+                msg.append("started.");
+            } else {
+                executionId = singleton.doWorkWithJobOperator(new JobOperatorWork<Long>() {
+                    @Override
+                    public Long doWorkWithJobOperator(JobOperator jobOperator) {
+                        return jobOperator.restart(startJobViewBean.getOldJobExecution().getExecutionId(), props);
+                    }
+                });
+                msg.append("restarted.");
+            }
+            msg.append(" execution id is: ").append(executionId);
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "job started. execution id=" + executionId, null));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, msg.toString(), null));
         } catch (NamingException e) {
             try (StringWriter sw = new StringWriter();
                  PrintWriter pw = new PrintWriter(sw)) {

@@ -69,7 +69,7 @@
                 <ui:repeat value="#{indexViewBean.jobExecutionTableRowDtos}" var="item">
                     <tr class="data #{indexRequestBean.isSelectedJobExecution(item.jobExecutionId) ? 'selected' : null} #{item.batchStatus == 'FAILED' ? 'error' : null}">
                         <td class="id numeric clickable" onclick="onJobExecutionRowClick(this);">
-                            #{item.jobExecutionId}
+                            <span class="jobExecutionId">#{item.jobExecutionId}</span>
                             <!-- Ugly but we need hidden commandButton because we have to invoke remote method via js -->
                             <h:commandButton style="display: none;">
                                 <f:ajax listener="#{indexRequestBean.selectJobExecution(item.jobExecutionId)}"
@@ -91,7 +91,8 @@
                         </td>
                         <td class="status clickable" onclick="onJobExecutionRowClick(this);">#{item.batchStatus}</td>
                         <td class="action">
-                            <h:selectOneMenu value="#{item.action}" p:autocomplete="off">
+                            <h:selectOneMenu value="#{item.action}" p:autocomplete="off"
+                                    onchange="onSelectAction(this);">
                                 <f:ajax listener="#{indexRequestBean.selectAction(item)}"
                                         render=":jobExecutionsForm :msgs"
                                         execute="@this"/>

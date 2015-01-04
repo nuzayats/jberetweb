@@ -2,6 +2,7 @@ package org.nailedtothex.jberetweb.logic;
 
 import org.nailedtothex.jberetweb.dto.JobParameterDto;
 
+import javax.batch.runtime.JobExecution;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -15,6 +16,15 @@ public class StartJobViewBean implements Serializable {
     List<JobParameterDto> jobParameters;
     String newJobParameterName;
     String newJobParameterValue;
+    JobExecution oldJobExecution;
+
+    public JobExecution getOldJobExecution() {
+        return oldJobExecution;
+    }
+
+    public void setOldJobExecution(JobExecution oldJobExecution) {
+        this.oldJobExecution = oldJobExecution;
+    }
 
     public String getNewJobParameterName() {
         return newJobParameterName;
