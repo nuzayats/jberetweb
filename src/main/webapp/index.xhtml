@@ -81,7 +81,7 @@
                         </td>
                         <td class="id numeric clickable" onclick="onJobExecutionRowClick(this);">#{item.jobInstanceId}</td>
                         <td class="clickable" onclick="onJobExecutionRowClick(this);">#{item.jobName}</td>
-                        <td class="dateTime clickable">
+                        <td class="dateTime clickable" onclick="onJobExecutionRowClick(this);">
                         <span jsfc="h:outputText" value="#{item.startTime}">
                         yyyy-MM-dd HH:mm:ss
                             <f:convertDateTime type="date" pattern="yyyy-MM-dd HH:mm:ss"/>

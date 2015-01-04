@@ -17,6 +17,15 @@ public class StartJobViewBean implements Serializable {
     String newJobParameterName;
     String newJobParameterValue;
     JobExecution oldJobExecution;
+    StartJobType startJobType;
+
+    public StartJobType getStartJobType() {
+        return startJobType;
+    }
+
+    public void setStartJobType(StartJobType startJobType) {
+        this.startJobType = startJobType;
+    }
 
     public JobExecution getOldJobExecution() {
         return oldJobExecution;

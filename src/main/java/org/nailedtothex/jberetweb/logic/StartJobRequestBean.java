@@ -28,6 +28,15 @@ public class StartJobRequestBean {
     @Inject
     JBeretWebSingleton singleton;
     Long restartJobExecutionId;
+    Long reExecJobExecutionId;
+
+    public Long getReExecJobExecutionId() {
+        return reExecJobExecutionId;
+    }
+
+    public void setReExecJobExecutionId(Long reExecJobExecutionId) {
+        this.reExecJobExecutionId = reExecJobExecutionId;
+    }
 
     public Long getRestartJobExecutionId() {
         return restartJobExecutionId;
@@ -39,28 +48,41 @@ public class StartJobRequestBean {
 
     public void init() throws NamingException {
         List<JobParameterDto> params = new ArrayList<>();
+        startJobViewBean.setJobParameters(params);
 
+        final long oldJobExecutionId;
         if (restartJobExecutionId != null) {
-            final JobExecution jobExecution = singleton.doWorkWithJobOperator(new JobOperatorWork<JobExecution>() {
-                @Override
-                public JobExecution doWorkWithJobOperator(JobOperator jobOperator) {
-                    return jobOperator.getJobExecution(restartJobExecutionId);
-                }
-            });
-            startJobViewBean.setOldJobExecution(jobExecution);
-            startJobViewBean.setJobName(jobExecution.getJobName());
-
-            for (Object o : jobExecution.getJobParameters().keySet()) {
-                String key = String.valueOf(o);
-                params.add(new JobParameterDto(key, jobExecution.getJobParameters().getProperty(key)));
-            }
+            startJobViewBean.setStartJobType(StartJobType.RESTART);
+            oldJobExecutionId = restartJobExecutionId;
+        } else if (reExecJobExecutionId != null) {
+            startJobViewBean.setStartJobType(StartJobType.RE_EXEC);
+            oldJobExecutionId = reExecJobExecutionId;
+        } else {
+            startJobViewBean.setStartJobType(StartJobType.NEW);
+            return;
         }
 
-        startJobViewBean.setJobParameters(params);
+        final JobExecution jobExecution = singleton.doWorkWithJobOperator(new JobOperatorWork<JobExecution>() {
+            @Override
+            public JobExecution doWorkWithJobOperator(JobOperator jobOperator) {
+                return jobOperator.getJobExecution(oldJobExecutionId);
+            }
+        });
+        startJobViewBean.setOldJobExecution(jobExecution);
+        startJobViewBean.setJobName(jobExecution.getJobName());
+
+        for (Object o : jobExecution.getJobParameters().keySet()) {
+            String key = String.valueOf(o);
+            params.add(new JobParameterDto(key, jobExecution.getJobParameters().getProperty(key)));
+        }
     }
 
     public boolean isRestart() {
-        return startJobViewBean.getOldJobExecution() != null;
+        return startJobViewBean.getStartJobType() == StartJobType.RESTART;
+    }
+
+    public boolean isReExec() {
+        return startJobViewBean.getStartJobType() == StartJobType.RE_EXEC;
     }
 
     public void addJobParameter() {
