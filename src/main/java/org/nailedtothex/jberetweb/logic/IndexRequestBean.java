@@ -123,8 +123,10 @@ public class IndexRequestBean {
         return dataBean.getJobExecution() != null && Objects.equals(jobExecutionId, dataBean.getJobExecution().getJobexecutionid());
     }
 
-    public SelectItem[] getSelectItems(String hoge) {
-        switch (hoge) {
+    private static final SelectItem[] EMPTY_ITEM = new SelectItem[0];
+    
+    public SelectItem[] getSelectItems(String batchStatus) {
+        switch (batchStatus) {
             case "COMPLETED":
             case "ABANDONED":
                 return ACTIONS_FOR_COMPLETED_OR_ABANDONED;
@@ -135,7 +137,7 @@ public class IndexRequestBean {
             case "STARTED":
                 return ACTIONS_FOR_STARTING_OR_STARTED;
         }
-        return new SelectItem[]{new SelectItem("value", "label")};
+        return EMPTY_ITEM;
     }
 
     public void selectAction(JobExecutionTableRowDto d) throws NamingException {
@@ -149,9 +151,6 @@ public class IndexRequestBean {
                 break;
             case ABANDON:
                 abandon(executionId);
-                break;
-            case RESTART:
-                // not implemented yet
                 break;
         }
         fetch();

@@ -1,7 +1,7 @@
 package org.nailedtothex.jberetweb.dto;
 
 public enum JobExecutionAction {
-    SELECT("Select"),
+    SELECT(""),
     RE_EXECUTE("Re-execute as new instance"),
     RESTART("Restart"),
     STOP("Stop"),
