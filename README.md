@@ -13,7 +13,7 @@ jBeret job repository viewer
 
 - JDBC job repository is registered as java:jboss/jdbc/JBatchDS
 - JSF project stage is defined in JNDI resource 'java:/env/jsf/ProjectStage' on the application server
-    - example: ./jboss-cli.sh --connect --command='/subsystem=naming/binding=java\:\/env\/jsf\/ProjectStage:add(binding-type=simple,value=Development,class=java.lang.String)'
+    - example: ./jboss-cli.sh --connect --command='/subsystem=naming/binding=java\\:\/env\/jsf\/ProjectStage:add(binding-type=simple,value=Development,class=java.lang.String)'
 - (Option) Exposed JobOperator remote EJB interface is installed in the batch application archive
 
 ### How to use
