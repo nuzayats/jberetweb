@@ -32,3 +32,4 @@ jBeret job repository viewer
 ### Notes
 
 - More information can be found at [author's blog](http://www.nailedtothex.org/roller/kyle/category/jberetweb)
+- Suppress mvn parameter "-DjobOperator.jndi" to invoke BatchRuntime.getJobOperator() directly (in that case, you have to put your batch artifacts into jberetweb deployment).
