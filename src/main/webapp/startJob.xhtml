@@ -2,10 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <head jsfc="h:head">
     <link rel="stylesheet" href="resources/css/base.css" type="text/css"
           jsfc="h:outputStylesheet" library="css" name="base.css"/>
@@ -35,12 +35,28 @@
             </span>
 
             <h:form id="jobForm">
-                <div style="margin-top: 10px; ">
+                <div class="labelAndInput" style="margin-top: 10px; display: #{singleton.operationMode != 'REMOTE_MULTIPLE' ? 'none' : 'block'};">
+                    <label for="applicationName" jsfc="h:outputLabel">App Name:</label>
+                    <h:inputText value="#{startJobViewBean.applicationName}"
+                           disabled="#{startJobRequestBean.restart}"
+                           required="#{singleton.operationMode == 'REMOTE_MULTIPLE'}"
+                           requiredMessage="App Name is required" id="applicationName">
+                        <c:if test="#{singleton.operationMode == 'REMOTE_MULTIPLE'}">
+                            <f:passThroughAttribute name="autofocus" value="autofocus"/>
+                        </c:if>
+                    </h:inputText>
+                    <h:message for="applicationName" style="margin-left: 1em;" id="applicationNameMsg"/>
+                </div>
+                
+                <div class="labelAndInput" style="margin-top: 10px; ">
                     <label for="jobName" jsfc="h:outputLabel">Job Name:</label>
-                    <input type="text" jsfc="h:inputText" value="#{startJobViewBean.jobName}" p:autofocus="autofocus"
+                    <h:inputText value="#{startJobViewBean.jobName}"
                            disabled="#{startJobRequestBean.restart}"
                            required="true" requiredMessage="Job Name is required" id="jobName">
-                    </input>
+                        <c:if test="#{singleton.operationMode != 'REMOTE_MULTIPLE'}">
+                            <f:passThroughAttribute name="autofocus" value="autofocus"/>
+                        </c:if>
+                    </h:inputText>
                     <h:message for="jobName" style="margin-left: 1em;" id="jobNameMsg"/>
                 </div>
 
@@ -53,8 +69,8 @@
 
                 <div style="margin-top: 20px;">
                     <input type="button" value="start" jsfc="h:commandButton" style="display: none;" id="startButton">
-                        <f:ajax render="jobNameMsg :msgs newJobParameterForm:newJobParameterNameMsg"
-                                execute="jobName"
+                        <f:ajax render="applicationNameMsg jobNameMsg :msgs newJobParameterForm:newJobParameterNameMsg"
+                                execute="applicationName jobName"
                                 listener="#{startJobRequestBean.start}"/>
                     </input>
                 </div>

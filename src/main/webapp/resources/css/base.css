@@ -165,3 +165,9 @@ form#newJobParameterForm label {
     float: left;
     width: 4em;
 }
+
+div.labelAndInput label {
+    display: block;
+    float: left;
+    width: 6em;
+}

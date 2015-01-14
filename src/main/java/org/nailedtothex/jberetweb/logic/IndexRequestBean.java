@@ -124,7 +124,7 @@ public class IndexRequestBean {
     }
 
     private static final SelectItem[] EMPTY_ITEM = new SelectItem[0];
-    
+
     public SelectItem[] getSelectItems(String batchStatus) {
         switch (batchStatus) {
             case "COMPLETED":
@@ -163,7 +163,7 @@ public class IndexRequestBean {
                 jobOperator.stop(executionId);
                 return null;
             }
-        });
+        }, singleton.getApplicationNameByJobExecutionId(executionId));
     }
 
     public void abandon(final long executionId) throws NamingException {
@@ -173,6 +173,6 @@ public class IndexRequestBean {
                 jobOperator.abandon(executionId);
                 return null;
             }
-        });
+        }, singleton.getApplicationNameByJobExecutionId(executionId));
     }
 }

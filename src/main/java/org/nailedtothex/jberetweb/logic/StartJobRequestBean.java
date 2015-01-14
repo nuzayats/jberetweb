@@ -12,6 +12,8 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -29,6 +31,8 @@ public class StartJobRequestBean {
     JBeretWebSingleton singleton;
     Long restartJobExecutionId;
     Long reExecJobExecutionId;
+    @PersistenceContext
+    EntityManager em;
 
     public Long getReExecJobExecutionId() {
         return reExecJobExecutionId;
@@ -62,14 +66,16 @@ public class StartJobRequestBean {
             return;
         }
 
+        final String applicationName = singleton.getApplicationNameByJobExecutionId(oldJobExecutionId);
         final JobExecution jobExecution = singleton.doWorkWithJobOperator(new JobOperatorWork<JobExecution>() {
             @Override
             public JobExecution doWorkWithJobOperator(JobOperator jobOperator) {
                 return jobOperator.getJobExecution(oldJobExecutionId);
             }
-        });
+        }, applicationName);
         startJobViewBean.setOldJobExecution(jobExecution);
         startJobViewBean.setJobName(jobExecution.getJobName());
+        startJobViewBean.setApplicationName(applicationName);
 
         for (Object o : jobExecution.getJobParameters().keySet()) {
             String key = String.valueOf(o);
@@ -122,7 +128,7 @@ public class StartJobRequestBean {
                     public Long doWorkWithJobOperator(JobOperator jobOperator) {
                         return jobOperator.start(startJobViewBean.getJobName(), props);
                     }
-                });
+                }, startJobViewBean.getApplicationName());
                 msg.append("started.");
             } else {
                 executionId = singleton.doWorkWithJobOperator(new JobOperatorWork<Long>() {
@@ -130,7 +136,7 @@ public class StartJobRequestBean {
                     public Long doWorkWithJobOperator(JobOperator jobOperator) {
                         return jobOperator.restart(startJobViewBean.getOldJobExecution().getExecutionId(), props);
                     }
-                });
+                }, startJobViewBean.getApplicationName());
                 msg.append("restarted.");
             }
             msg.append(" execution id is: ").append(executionId);

@@ -6,15 +6,19 @@ import java.util.Date;
 public class JobExecutionTableRowDto implements Serializable {
     Integer jobExecutionId;
     Long jobInstanceId;
+    String applicationName;
     String jobName;
     Date startTime;
     Date endTime;
     String batchStatus;
     JobExecutionAction action = JobExecutionAction.SELECT;
 
-    public JobExecutionTableRowDto(Integer jobExecutionId, Long jobInstanceId, String jobName, Date startTime, Date endTime, String batchStatus) {
+    public JobExecutionTableRowDto(Integer jobExecutionId, Long jobInstanceId,
+                                   String applicationName, String jobName, 
+                                   Date startTime, Date endTime, String batchStatus) {
         this.jobExecutionId = jobExecutionId;
         this.jobInstanceId = jobInstanceId;
+        this.applicationName = applicationName;
         this.jobName = jobName;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -38,6 +42,14 @@ public class JobExecutionTableRowDto implements Serializable {
 
     public void setJobExecutionId(Integer jobExecutionId) {
         this.jobExecutionId = jobExecutionId;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
     public String getJobName() {
@@ -85,6 +97,7 @@ public class JobExecutionTableRowDto implements Serializable {
         return "JobExecutionTableRowDto{" +
                 "jobExecutionId=" + jobExecutionId +
                 ", jobInstanceId=" + jobInstanceId +
+                ", applicationName='" + applicationName + '\'' +
                 ", jobName='" + jobName + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +

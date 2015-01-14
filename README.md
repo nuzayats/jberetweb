@@ -29,6 +29,20 @@ jBeret job repository viewer
     - comes with executionId, jobName, startTime, endTime, batchStatus
 - Various job operations such as start, restart, stop, abandon etc
 
+### For multiple deployment use
+
+jberetweb offers multiple deployment use mode. in this mode,
+
+- "App Name" column will be added to Job Execution table
+- "App Name" input field will be added to Start/Restart Job window
+- jberetweb will change a part of JNDI name of JobOperator for each lookup accordingly
+
+Make sure that your facade beans are deployed on each deployment and named on JNDI like "java:global/${war-name}/${facade-class-name}". normally you don't have to care about it because it's standardized naming rule for EJB which packed in WAR archives.
+
+To enable multiple deployment use mode, suppress -DjobOperator.jndi, and specify -DjobOperator.name=${facade-class-name} in mvn option.
+
+For EAR deployments, you can specify -DjobOperator.format to override formatting rule of JNDI which jberetweb uses. default is "java:global/{0}/{1}". {0} will be replaced by deployment name (application name) and {1} will be replaced by jobOperator.name.
+
 ### Notes
 
 - More information can be found at [author's blog](http://www.nailedtothex.org/roller/kyle/category/jberetweb)

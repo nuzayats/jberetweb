@@ -47,6 +47,8 @@
             <id>default</id>
             <properties>
                 <dataSourceName>java:jboss/jdbc/JBatchDS</dataSourceName>
+                <jobOperator.format>java:global/{0}/{1}</jobOperator.format>
+                <jobOperator.name></jobOperator.name>
                 <jobOperator.jndi></jobOperator.jndi>
             </properties>
             <activation>

@@ -18,6 +18,7 @@ public class StartJobViewBean implements Serializable {
     String newJobParameterValue;
     JobExecution oldJobExecution;
     StartJobType startJobType;
+    String applicationName;
 
     public StartJobType getStartJobType() {
         return startJobType;
@@ -65,5 +66,13 @@ public class StartJobViewBean implements Serializable {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 }

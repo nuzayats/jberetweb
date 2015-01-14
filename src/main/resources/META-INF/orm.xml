@@ -13,6 +13,7 @@
                 NEW org.nailedtothex.jberetweb.dto.JobExecutionTableRowDto(
                     je.jobexecutionid,
                     je.jobinstanceid,
+                    je.jobInstanceByJobinstanceid.applicationname,
                     je.jobInstanceByJobinstanceid.jobname,
                     je.starttime,
                     je.endtime,
@@ -38,4 +39,15 @@
         ]]></query>
     </named-query>
 
+    <named-query name="findApplicationNameByJobExecutionId">
+        <query><![CDATA[
+            SELECT
+                je.jobInstanceByJobinstanceid.applicationname
+            FROM
+                JobExecution je
+            WHERE
+                je.jobexecutionid = :jobExecutionId
+        ]]></query>
+    </named-query>
+    
 </entity-mappings>

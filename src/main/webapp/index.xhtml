@@ -41,7 +41,10 @@
                 <tr>
                     <th class="id">Execution ID</th>
                     <th class="id">Instance ID</th>
-                    <th>Name</th>
+                    <ui:fragment rendered="#{singleton.operationMode == 'REMOTE_MULTIPLE'}">
+                        <th>App Name</th>
+                    </ui:fragment>
+                    <th>Job Name</th>
                     <th class="dateTime">Start</th>
                     <th class="dateTime">End</th>
                     <th class="status">BatchStatus</th>
@@ -80,6 +83,9 @@
                             </h:commandButton>
                         </td>
                         <td class="id numeric clickable" onclick="onJobExecutionRowClick(this);">#{item.jobInstanceId}</td>
+                        <ui:fragment rendered="#{singleton.operationMode == 'REMOTE_MULTIPLE'}">
+                            <td class="clickable" onclick="onJobExecutionRowClick(this);">#{item.applicationName}</td>
+                        </ui:fragment>
                         <td class="clickable" onclick="onJobExecutionRowClick(this);">#{item.jobName}</td>
                         <td class="dateTime clickable" onclick="onJobExecutionRowClick(this);">
                         <span jsfc="h:outputText" value="#{item.startTime}">
