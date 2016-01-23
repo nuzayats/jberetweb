@@ -9,7 +9,7 @@ jBeret job repository viewer
 - Oracle JDK7u51
 - PostgreSQL 9.2.4
 
-### Preconditions
+### Prerequisites
 
 - JDBC job repository is registered as ```java:jboss/jdbc/JBatchDS```
 - JSF project stage is defined in JNDI resource ```java:/env/jsf/ProjectStage``` on the application server
