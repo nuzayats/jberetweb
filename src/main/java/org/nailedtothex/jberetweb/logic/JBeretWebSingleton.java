@@ -1,13 +1,13 @@
 package org.nailedtothex.jberetweb.logic;
 
-import javax.batch.operations.JobOperator;
-import javax.batch.runtime.BatchRuntime;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import jakarta.batch.operations.JobOperator;
+import jakarta.batch.runtime.BatchRuntime;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;

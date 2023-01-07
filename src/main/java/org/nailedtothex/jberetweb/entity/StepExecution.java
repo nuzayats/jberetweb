@@ -1,6 +1,6 @@
 package org.nailedtothex.jberetweb.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 

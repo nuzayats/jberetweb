@@ -5,9 +5,9 @@ jBeret job repository viewer
 
 ### Tested environment
 
-- WildFly 8.0.0.Final
-- Oracle JDK7u51
-- PostgreSQL 9.2.4
+- WildFly 27.0.1.Final (Jakarta EE 10)
+- Eclipse Temurin OpenJDK 17
+- Oracle 21.8 (driver)
 
 ### Prerequisites
 
