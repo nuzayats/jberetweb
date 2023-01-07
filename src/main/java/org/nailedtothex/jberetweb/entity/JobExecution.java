@@ -1,7 +1,7 @@
 package org.nailedtothex.jberetweb.entity;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.sql.Timestamp;
 
 @Entity

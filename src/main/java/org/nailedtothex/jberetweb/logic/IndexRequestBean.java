@@ -6,14 +6,14 @@ import org.nailedtothex.jberetweb.dto.JobParameterDto;
 import org.nailedtothex.jberetweb.entity.JobExecution;
 import org.nailedtothex.jberetweb.entity.StepExecution;
 
-import javax.batch.operations.JobOperator;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.batch.operations.JobOperator;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.model.SelectItem;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.*;
 
 @Named

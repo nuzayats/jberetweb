@@ -1,7 +1,7 @@
 package org.nailedtothex.jberetweb.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 
 public class PartitionExecutionPK implements Serializable {
